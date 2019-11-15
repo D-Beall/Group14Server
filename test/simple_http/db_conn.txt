@@ -1,0 +1,3 @@
+Sqlitex.with_db('/root/projects/elixir/Group14Server/elixir_streaming.db', fn(db) ->
+Sqlitex.query(db, "SELECT * FROM audioinfo")
+end)
