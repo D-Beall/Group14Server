@@ -22,5 +22,5 @@ def insert_db(title, artist, folder_name):
     conn.close()
 
 insert_db('The Jungle Book', 'Rudyard KIPLING', 'thejunglebook_pc_librivox')
-insert_db('Crome Yellow', 'Aldous Huxley', 'crome_yellow_librivox_64kb_mp3')
+insert_db('Crome Yellow', 'Aldous Huxley', 'cromeyellow_librivox_64kb_mp3')
 insert_db('The Odyssey', 'Homer and Samuel Butler', 'odyssey_butler_librivox')
