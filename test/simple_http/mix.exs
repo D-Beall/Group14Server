@@ -26,7 +26,8 @@ defmodule SimpleServer.MixProject do
       {:plug, "~> 1.5"},
       {:poison, "~> 3.1"},
       {:sqlitex, "~> 1.7.0"},
-      {:plug_cowboy, "~> 1.0"}
+      {:plug_cowboy, "~> 1.0"},
+      {:json, "~> 1.2"}
     ]
   end
 end

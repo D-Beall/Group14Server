@@ -42,21 +42,27 @@ post "/download2" do
   # song_path = List.first(results)[:path] # return a single result
   # item = List.first(results)
   # IO.inspect(item)
-  
-  return_lst = []
+  # IO.inspect(results)
+
   # res = Poison.encode!(results)
-  for item <- results do
-    artist = item[:artist]
-    dnld_path = item[:path]
-    tmp_map = %{artist: artist, dnld_path: dnld_path}
+  
+  # return_lst = []
+  # for item <- results do
+  #   artist = item[:artist]
+  #   dnld_path = item[:path]
+  #   tmp_map = %{artist: artist, dnld_path: dnld_path}
     # IO.inspect(tmp_map)
-    return_lst = return_lst ++ [tmp_map]
-  end
-  song_path = Poison.encode!(return_lst)
-  IO.inspect(return_lst)
+    # return_lst = return_lst ++ [tmp_map]
+    # List.insert_at(return_lst, -1, [tmp_map])
+    # IO.inspect(return_lst)
+  # end
+  res = Stream.map(results, fn list -> %{Artist: list[:artist], title: list[:title], dnld_path: list[:path]} end) |> Poison.encode!
+
+  # song_path = Poison.encode!(return_lst)
+  # IO.inspect(return_lst)
 
   # send_resp(conn, 201, "song_path: #{song_path}") # cannot return a dict
-  send_resp(conn, 201, song_path) # cannot return a dict
+  send_resp(conn, 201, res) # cannot return a dict
 end
 
 
