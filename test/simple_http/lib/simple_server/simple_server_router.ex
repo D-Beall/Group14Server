@@ -25,21 +25,38 @@ post "/post" do
 
 
 #####  Test ####
+get "/get_song_names" do
+  test_string = "Available songs name:
+  The Odyssey, The Jungle Book, Crome Yellow"
+  send_resp(conn, 200, "#{test_string}")
+end
+
 post "/download2" do
   {:ok, body, conn} = read_body(conn) 
   body = Poison.decode!(body)
   IO.inspect(body)
   song_name = get_in(body, ["song_name"])
 
-  song_dnld_path = Sqlitex.with_db('/root/projects/elixir/Group14Server/elixir_streaming.db', fn(db) ->
-  Sqlitex.query(db, 'SELECT * FROM audioinfo where title=#{song_name}')
-  end)
+  {:ok, db} = Sqlitex.open("/root/projects/elixir/Group14Server/elixir_streaming.db")
+  {:ok, results} = Sqlitex.query(db, "SELECT * FROM audioinfo WHERE title='#{song_name}'")
+  # song_path = List.first(results)[:path] # return a single result
+  # item = List.first(results)
+  # IO.inspect(item)
+  
+  return_lst = []
+  # res = Poison.encode!(results)
+  for item <- results do
+    artist = item[:artist]
+    dnld_path = item[:path]
+    tmp_map = %{artist: artist, dnld_path: dnld_path}
+    # IO.inspect(tmp_map)
+    return_lst = return_lst ++ [tmp_map]
+  end
+  song_path = Poison.encode!(return_lst)
+  IO.inspect(return_lst)
 
-  # if song_name == "crome_yello" do
-  #song_path = "http://xzy3.cs.seas.gwu.edu/audiofiles/audiobooks/crome_yellow_librivox_64kb_mp3/crome_yellow_01_huxley_mac_64kb.mp3"
-  # send_resp(conn, 201, "song_path: #{song_path}")
-  send_resp(conn, 201, "song_path: #{song_dnld_path}")
-  # end
+  # send_resp(conn, 201, "song_path: #{song_path}") # cannot return a dict
+  send_resp(conn, 201, song_path) # cannot return a dict
 end
 
 
@@ -49,7 +66,6 @@ post "/download" do
   body = Poison.decode!(body)
   IO.inspect(body)
   song_name = get_in(body, ["song_name"])
-  # if song_name == "crome_yello" do
   song_path = "http://xzy3.cs.seas.gwu.edu/audiofiles/audiobooks/crome_yellow_librivox_64kb_mp3/crome_yellow_01_huxley_mac_64kb.mp3"
   send_resp(conn, 201, "song_path: #{song_path}")
   # end
