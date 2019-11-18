@@ -17,7 +17,7 @@ defmodule SimpleServer.Router do
     {:ok, body, conn} = read_body(conn)
     body = Poison.decode!(body)
     song_name = get_in(body, ["song_name"])
-    artist = get_in(body, "artist")
+    artist = get_in(body, ["artist"])
     {:ok, db} = Sqlitex.open("/root/projects/elixir/Group14Server/elixir_streaming.db")
     {:ok, results} = Sqlitex.query(db, "SELECT * FROM audioinfo WHERE title='#{song_name}' AND artist='#{artist}';")
     res =
